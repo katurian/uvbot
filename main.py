@@ -17,6 +17,9 @@ def get_uv_color(uv_value):
     else:
         return "rgba(238, 130, 238, 0.6)" # violet
 
+with open('config.json', 'r') as f:
+    data = json.load(f)
+
 intents = discord.Intents.all()
 
 client = discord.Client(intents=intents)
@@ -69,4 +72,4 @@ async def on_message(message):
         parsed = json.loads(response.text)
         await message.reply(parsed["url"])
 
-client.run('XXXXXXXXXXXXXXXXXXXXXX')
+client.run(data['token'])
