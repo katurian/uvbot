@@ -37,13 +37,13 @@ async def on_message(message):
         response = requests.get(f'https://data.epa.gov/efservice/getEnvirofactsUVHourly/ZIP/{zipcode}/JSON')
         uv_json = response.json()
         for item in uv_json:  
-            dt_obj = datetime.strptime(item['DATE_TIME'], '%b/%d/%Y %I %p')
-            labels.append(dt_obj.strftime('%I %p'))
-            uv_values.append(int(item['UV_VALUE']))
+            if int(item['UV_VALUE']) > 0:
+                dt_obj = datetime.strptime(item['DATE_TIME'], '%b/%d/%Y %I %p')
+                labels.append(dt_obj.strftime('%I %p'))
+                uv_values.append(int(item['UV_VALUE']))
+            else:
+                continue
         uv_colors = [get_uv_color(value) for value in uv_values]
-        labels = labels[2:-7]
-        uv_values = uv_values[2:-7]
-        uv_colors = uv_colors[2:-7]
         chart_config = {
             "type": "bar",
             "data": {
@@ -68,7 +68,5 @@ async def on_message(message):
         response = requests.post('https://quickchart.io/chart/create', json=postdata)
         parsed = json.loads(response.text)
         await message.reply(parsed["url"])
-    if message.content == '<:ching_cat:1134237022228324352>': 
-        await message.reply('<:ching_cat:1134237022228324352>')
 
-client.run('XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX')
+client.run('XXXXXXXXXXXXXXXXXXXXXX')
